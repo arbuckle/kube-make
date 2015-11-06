@@ -1,5 +1,31 @@
 # Dangerous Kubernetes Management Tool
 
+Insight:
+
+MAKE is a bad fit for this... 
+shell scripts may be too, when it comes to performing updates on existing resources, but moving forward anyways
+
+What I need is an application that lets me manage the artifacts that are important to the kubernetes environment separately from
+all of my code repositories.  The source repo should be concerned with creating a shippable "artifact".  This project is concerned 
+mainly with orchestrating and connecting all different kinds of artifacts.
+
+So it makes a little bit of sense to colocate the tools responsible for deploying to a remote kubernetes with the configurations
+describing how they will be deployed.
+
+
+## TODOs:
+
+1 improve argument parsing - add help text and consolidate valudation
+* create example project
+* create example project with secrets
+* create example project with externals
+* delete actual projects from here
+* update functionality
+* validation of kube responses functionality
+* ~~replace makefile with deploy.sh~~
+
+---
+
 This utility provides some simple capabilities related to managing a Kubernetes cluster over the api.  There is a tool to retrieve the complete state (audit), delete a namespace, and bootstrap an environment from colacated config files.  
 
 The Makefile is configured with an address and a namespace, which are provided to a variety of simple shell scripts.

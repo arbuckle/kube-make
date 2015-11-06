@@ -4,8 +4,10 @@
 
 NAMESPACE=$1
 KUBE_MASTER=$2
+KUBE_TOKEN=$3
+WORKDIR=$4
+
 API="$KUBE_MASTER/namespaces/$NAMESPACE"
-RESOURCES=("pods" "replicationcontrollers" "services" "events")
 
 if [ "$NAMESPACE" == "" ]; then
 	echo invalid namespace
@@ -17,13 +19,9 @@ if [ "$KUBE_MASTER" == "" ]; then
 	exit 1
 fi;
 
-echo auditing kubernetes at $API
+echo cd $WORKDIR
+cd $WORKDIR
 
-echo getting nodes
-curl -s "$KUBE_MASTER/nodes"
-
-for resource in "${RESOURCES[@]}"; do
-	echo getting $resource
-	curl -s "$API/$resource"
-done;
+echo deleting namespace
+curl -k -s -X DELETE --header "Authorization: Bearer $KUBE_TOKEN" "$API"
 
