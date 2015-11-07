@@ -66,6 +66,9 @@ case "$action" in
     audit)
         sh ./src/audit.sh $env $api $token $workdir
         ;;
+    update)
+        sh ./src/update.sh $env $api $token $workdir
+        ;;
     create)
         sh ./src/create.sh $env $api $token $workdir
         ;;
