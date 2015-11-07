@@ -1,10 +1,12 @@
-
 #!/bin/bash
 # Copyright David Arbuckle 2015
 # MIT Licensed
 
 NAMESPACE=$1
 KUBE_MASTER=$2
+KUBE_TOKEN=$3
+WORKDIR=$4
+
 API="$KUBE_MASTER/namespaces/$NAMESPACE"
 RESOURCES=("svc" "rc" "endpoint")
 
@@ -18,15 +20,18 @@ if [ "$KUBE_MASTER" == "" ]; then
 	exit 1
 fi;
 
-echo checking for namespace file at ./$NAMESPACE.json
-if [ ! -f $NAMESPACE.json ]; then
-	# This actually doesn't even get executed
-	echo unable to find namespace file.  expected ./$NAMESPACE.json
+echo cd $WORKDIR
+cd $WORKDIR
+
+echo checking for namespace file at ./namespace.json
+if [ ! -f namespace.json ]; then
+	# This actually doesn't even get executed??
+	echo unable to find namespace file.  expected ./namespace.json
 	exit 1
 fi;
 
 echo creating namespace: $API
-curl --data @$NAMESPACE.json "$KUBE_MASTER/namespaces"
+curl -k --header "Authorization: Bearer $KUBE_TOKEN" --data @namespace.json "$KUBE_MASTER/namespaces"
 
 for resource in "${RESOURCES[@]}"; do
 	case "$resource" in 
@@ -47,10 +52,15 @@ for resource in "${RESOURCES[@]}"; do
 
 
 	echo getting $resource files
+        if [ ! -f $resource*.json ]; then
+            echo no $resource files found.  skipping
+            continue    
+        fi
+         
 	for file in $(ls $resource*.json); do
 		echo creating $file in $NAMESPACE
-		echo curl --data @$file $endpoint 
-		curl --data @$file $endpoint
+		echo curl -k --header "Authorization: Bearer $KUBE_TOKEN" --data @$file $endpoint 
+		curl -k --header "Authorization: Bearer $KUBE_TOKEN" --data @$file $endpoint 
 	done
 done;
 
