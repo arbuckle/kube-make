@@ -10,19 +10,27 @@ cat << EOF
        -h      Show this message
        -s      Server hostname / IP
        -p      Server port
-       -t      Server authentication token.  Authentication: Bearer <ProvidedToken>
        -a      Action to perform. audit|create|delete|reset
        -e      Target environment / application
+
+    Optional:
+       -t      Server authentication token.  Authentication: Bearer <ProvidedToken>
+       -c      Server client certificate. Not implemented.
 EOF
 }
 
-while getopts "h:s:p:t:a:e:" opt; do
+while getopts "htc:s:p:a:e:" opt; do
   case $opt in
     s) host=$OPTARG ;;
     p) port=$OPTARG ;;
-    t) token=$OPTARG ;;
     a) action=$OPTARG ;;
     e) env=$OPTARG ;;
+    t) token=$OPTARG ;;
+    c) 
+        usage;
+        echo Certificate authentication is not yet implemented
+        exit 1
+        ;;
     h) 
         usage;
         exit 1
@@ -38,13 +46,21 @@ done
 host=${host:-$KUBE_DEPLOY_HOST}
 port=${port:-$KUBE_DEPLOY_PORT} 
 token=${token:-$KUBE_DEPLOY_TOKEN}
+#cert=${cert:-$KUBE_DEPLOY_CERT}
 
 # And set up 
-api=https://$host:$port/api/v1
+protocol=https
+if [[ -z $token ]]; then  #&& [[ -z $cert ]]; then
+    protocol=http
+    token=xxx # need to set a dummy token, since CRUD scripts are expecting one.
+fi;
+api=$protocol://$host:$port/api/v1
 workdir=./apps/$env
 
+echo $api
+
 # Validate:
-if [[ -z $host ]] ||[[ -z $port ]] ||[[ -z $token ]] ||[[ -z $action ]] ||[[ -z $env ]]; then
+if [[ -z $host ]] ||[[ -z $port ]] || [[ -z $action ]] ||[[ -z $env ]]; then
         usage
         exit 1
 fi;

@@ -20,6 +20,15 @@ You can **delete** a namespace outright
 A word of warning:  This tool is a loaded weapon.  It's really easy to take deployed services down.
 
 
+## Getting Started
+
+To create an example environment in your local Kubernetes cluster:
+
+```
+    sh deploy.sh -s 127.0.0.1 -p 8080 -a create -e example
+```
+
+
 ## Conventions
 
 Applications are represented as folders in the `./apps` directory.
@@ -58,9 +67,12 @@ It's up to the operator to ensure that manually-specified service ports do not c
        -h      Show this message
        -s      Server hostname / IP
        -p      Server port
-       -t      Server authentication token.  Authentication: Bearer <ProvidedToken>
        -a      Action to perform. audit|create|delete|reset
        -e      Target environment / application
+
+    Optional:
+       -t      Server authentication token.  Authentication: Bearer <ProvidedToken>
+       -c      Server client certificate. Not implemented.
 ```
 
 **-s - Server**
@@ -71,11 +83,6 @@ The IP or Hostname of the remote host.  Can also be provided via the `KUBE_DEPLO
 
 The port upon which to contact the remote host.  Can also be provided via the `KUBE_DEPLOY_PORT` environmental variable
 
-**-t - Token**
-
-An authentication token for the remote host.  This value must be set, but in the case of unauthenticated access, can simply be set to a bogus value.  
-Can also be provided via the `KUBE_DEPLOY_TOKEN` environmental variable
-
 **-a - Action**
 
 The action to perform against the remote host.  Any one of audit, create, update, delete, reset; Detailed below.
@@ -83,6 +90,15 @@ The action to perform against the remote host.  Any one of audit, create, update
 **-e - Environment**
 
 The environment, or namespace, in which to perform the action.  This parameter must correspond to a directory name in the `./apps` folder.
+
+**-t - Token**
+
+An authentication token for the remote host.  Can also be provided via the `KUBE_DEPLOY_TOKEN` environmental variable
+
+**-c - Client Cert**
+
+The location of a client certificate for authentication with the kubernetes master.  Can also be provided via the `KUBE_DEPLOY_CERT` environmental variable
+
 
 
 
