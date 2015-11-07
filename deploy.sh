@@ -41,7 +41,7 @@ token=${token:-$KUBE_DEPLOY_TOKEN}
 
 # And set up 
 api=https://$host:$port/api/v1
-workdir=./kube/$env
+workdir=./apps/$env
 
 # Validate:
 if [[ -z $host ]] ||[[ -z $port ]] ||[[ -z $token ]] ||[[ -z $action ]] ||[[ -z $env ]]; then
