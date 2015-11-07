@@ -15,13 +15,13 @@ describing how they will be deployed.
 
 ## TODOs:
 
-1 improve argument parsing - add help text and consolidate valudation
-* create example project
+1 create example project
 * create example project with secrets
 * create example project with externals
 * delete actual projects from here
 * update functionality
 * validation of kube responses functionality
+* ~~improve argument parsing - add help text and consolidate valudation~~
 * ~~replace makefile with deploy.sh~~
 
 ---
